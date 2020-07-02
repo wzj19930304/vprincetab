@@ -57,3 +57,4 @@ name="add-menu"： 自定义点击按钮后的下拉菜单
 无论customAddBtn是否为true，自定义添加按钮的slot的name一直为customAddBtn
 目前每个tab的宽度为148px………………以后会可以自定义的！！！
 ```
+[GitHub地址](https://github.com/wzj19930304/vprincetab)
