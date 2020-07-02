@@ -1,7 +1,7 @@
-import PrinceTab from './tab'
+import vPrinceTab from './tab'
 
 const components = [
-    PrinceTab
+    vPrinceTab
 ];
 
 const install = function (Vue) {
@@ -18,5 +18,5 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 export default {
     install,
-    PrinceTab
+    vPrinceTab
 }
