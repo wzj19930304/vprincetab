@@ -24,7 +24,7 @@
                             </slot>
                         </div>
                     </transition>
-                    <div v-if="customAddBtn" @click="addItem">
+                    <div v-if="!customAddBtn" @click="addItem">
                         <slot name="customAddBtn"></slot>
                     </div>
                     <div v-else :class="`tab btn-wrap ${show ? 'chosen' : ''}`" @click.stop="show = !show">
