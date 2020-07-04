@@ -48,6 +48,7 @@
 </template>
 
 <script>
+    import "../../examples/assets/css/common.css"
     export default {
         name: "vPrinceTab",
         data() {
@@ -216,7 +217,7 @@
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     $themeColor: #783EFA;
     $pColor: #57565B;
     $tabBg: #E5E5EB;
