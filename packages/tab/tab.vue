@@ -9,7 +9,7 @@
                 </div>
             </transition>
             <div class="tabs-inner" @scroll="handleTabsScrollChange">
-                <div v-for="(item, index) in tabsList" :key="index" :class="`tab ${item.chosen ? 'chosen' : ''}`" :style="{width: actualTabWidth}" @click="handleClickCurrentTab(item, index)">
+                <div v-for="(item, index) in tabsList" :key="index" :class="`tab ${item.chosen ? 'chosen' : ''}`" :style="{width: actualTabWidth, minWidth: actualTabWidth}" @click="handleClickCurrentTab(item, index)">
                     <slot name="tabs-inner">
                         <span class="text">{{item.name}}</span>
                     </slot>
@@ -102,6 +102,12 @@
                     return this.tabWidth
                 },
                 set() {}
+            },
+            actualTabWidthNumber: {
+                set() {},
+                get() {
+                    return parseInt(this.actualTabWidth)
+                }
             }
         },
         mounted() {
@@ -122,19 +128,19 @@
                     let targetRect = targetDom.getBoundingClientRect();
                     // 4为当前tab的margin
                     // 选中的tab被右侧遮挡
-                    if((index+1) * (this.actualTabWidth + 4) > targetRect.width + targetDom.scrollLeft) {
-                        this.tabsBtn.width = (index+1) * this.actualTabWidth + 4;
+                    if((index+1) * (this.actualTabWidthNumber + 4) > targetRect.width + targetDom.scrollLeft) {
+                        this.tabsBtn.width = (index+1) * this.actualTabWidthNumber + 4;
                         // 根据向左按钮判断滚动条滚动距离（若当时没有，在滚动时出现，会有48px偏差）
                         if(this.tabsBtn.showLeft) {
-                            targetDom.scrollLeft = (index+1) * this.actualTabWidth + 4 - targetRect.width
+                            targetDom.scrollLeft = (index+1) * this.actualTabWidthNumber + 4 - targetRect.width
                         } else {
-                            targetDom.scrollLeft = (index+1) * this.actualTabWidth + 4 - targetRect.width + 38
+                            targetDom.scrollLeft = (index+1) * this.actualTabWidthNumber + 4 - targetRect.width + 38
                         }
                     }
                     // 选中的tab被左侧遮挡
-                    if(index * (this.actualTabWidth + 4) < targetDom.scrollLeft) {
+                    if(index * (this.actualTabWidthNumber + 4) < targetDom.scrollLeft) {
                         this.tabsBtn.width = 0;
-                        targetDom.scrollLeft = index * (this.actualTabWidth + 4)
+                        targetDom.scrollLeft = index * (this.actualTabWidthNumber + 4)
                     }
                 });
                 this.$emit('handleClickCurrentTab', item, index);
