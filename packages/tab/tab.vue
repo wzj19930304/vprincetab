@@ -219,174 +219,195 @@
     }
 </script>
 
-<style scoped>
-    #v-prince-tab {
+<style lang="scss" scoped>
+    $themeColor: #783EFA;
+    $pColor: #57565B;
+    $tabBg: #E5E5EB;
+    // flex column
+    @mixin flex-column{
         display: flex;
         flex-direction: column;
     }
-    #v-prince-tab .left-btn, #v-prince-tab .right-btn {
-        cursor: pointer;
+    // flex align center
+    @mixin flex-align-center {
         display: flex;
         align-items: center;
-        border-radius: 6px 6px 0px 0px;
-        background-color: #E5E5EB;
-        color: #57565B;
-        padding: 0 12px;
-        margin-right: 4px;
-        height: 34px;
-        transition: all 0.25s;
     }
-    #v-prince-tab .left-btn:hover, #v-prince-tab .right-btn:hover {
-        background-color: #fff;
-    }
-    #v-prince-tab .left-btn span, #v-prince-tab .right-btn span {
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-right: 10px solid #57565B;
-    }
-    #v-prince-tab .right-btn {
-        margin-left: 4px;
-        margin-right: 0;
-    }
-    #v-prince-tab .right-btn span {
-        transform: rotateZ(180deg);
-    }
-    #v-prince-tab .tabs {
-        display: flex;
-        align-items: center;
-        margin-top: 16px;
-    }
-    #v-prince-tab .tabs .tabs-inner {
-        display: flex;
-        /*min-width: 148px;*/
-        overflow: hidden;
-        scroll-behavior: smooth;
-    }
-    #v-prince-tab .tabs .tab {
-        position: relative;
+
+    // borderBox with padding
+    @mixin borderBox($top, $right: $top, $bottom: $top, $left: $right){
         box-sizing: border-box;
-        padding: 9px 12px 9px 12px;
-        max-width: 148px;
-        min-width: 50px;
-        text-align: center;
-        background-color: #E5E5EB;
-        color: #57565B;
-        font-size: 14px;
-        margin-right: 4px;
-        cursor: pointer;
-        user-select: none;
-        border-radius: 6px 6px 0 0;
-        overflow: hidden;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.25s;
+        padding: $top $right $bottom $left;
     }
-    #v-prince-tab .tabs .tab::before {
-        content: "";
-        width: 20px;
-        height: 20px;
-        display: inline-block;
-        background-color: #783EFA;
-        position: absolute;
-        top: -10px;
-        left: -10px;
-        transform: rotateZ(45deg);
-        opacity: 0;
-        transition: all 0.25s;
+
+    // common transition
+    @mixin transition($time: 0.25s){
+        transition: all $time;
     }
-    #v-prince-tab .tabs .tab:last-of-type {
-        margin-right: 0;
-    }
-    #v-prince-tab .tabs .tab.chosen {
-        background-color: #fff;
-        color: #783EFA;
-    }
-    #v-prince-tab .tabs .tab.chosen::before {
-        opacity: 1;
-    }
-    #v-prince-tab .tabs .tab:hover {
-        background-color: #fff;
-    }
-    #v-prince-tab .tabs .tab.btn-wrap {
-        overflow: visible;
-        position: relative;
-        min-width: 148px;
-        margin-right: 0;
-        margin-left: 4px;
-    }
-    #v-prince-tab .tabs .tab.btn-wrap:focus {
-        outline: none;
-        border: none;
-    }
-    #v-prince-tab .tabs .tab.btn-wrap::before {
-        display: none;
-    }
-    #v-prince-tab .tabs .tab.btn-wrap span {
-        position: relative;
+
+    // flex center
+    @mixin flex-center {
         display: flex;
         align-items: center;
         justify-content: center;
     }
-    #v-prince-tab .tabs .tab.btn-wrap span i {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        left: -19px;
-        color: #783EFA;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    #v-prince-tab .tabs .tab.btn-wrap span span {
-        color: #783EFA;
-    }
-    #v-prince-tab .tabs .tab.btn-wrap .transition-box {
-        z-index: 11;
-        background-color: #fff;
-        position: absolute;
-        left: 0;
-        top: 40px;
-        padding: 6px 0;
-        box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.08), 0 0 4px 0 rgba(0, 0, 0, 0.02);
-        border-radius: 2px;
-        width: 100%;
-    }
-    #v-prince-tab .tabs .tab.btn-wrap .transition-box li {
-        cursor: pointer;
-        padding: 5px 24px 5px 12px;
-        color: #57565B;
-        text-align: left;
-        transition: all 0.25s;
-    }
-    #v-prince-tab .tabs .tab.btn-wrap .transition-box li:hover {
-        color: #783EFA;
-        background-color: #F2F0FE;
-    }
-    #v-prince-tab .tabs .tab .text {
-        display: inline-block;
-        width: 100%;
+
+    /*单行文本溢出*/
+    @mixin single-line {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-    #v-prince-tab .tabs .tab .new, #v-prince-tab .tabs .tab .current-active {
-        margin-left: 8px;
-        padding: 0 4px;
-        color: #fff;
-        font-size: 12px;
-        background-color: #41BF1C;
-        border-radius: 3px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    #v-prince-tab .tabs .tab .current-active {
-        background-color: #783EFA;
+    #v-prince-tab{
+        @include flex-column;
+        .left-btn,.right-btn{
+            cursor: pointer;
+            @include flex-align-center;
+            border-radius:6px 6px 0px 0px;
+            background-color: $tabBg;
+            color: $pColor;
+            padding: 0 12px;
+            margin-right: 4px;
+            height: 34px;
+            @include transition();
+            &:hover{
+                background-color: #fff;
+            }
+            span{
+                border-top: 8px solid transparent;
+                border-bottom: 8px solid transparent;
+                border-right: 10px solid $pColor;
+            }
+        }
+        .right-btn{
+            margin-left: 4px;
+            margin-right: 0;
+            span{
+                transform: rotateZ(180deg);
+            }
+        }
+        .tabs{
+            @include flex-align-center;
+            margin-top: 16px;
+            .tabs-inner{
+                display: flex;
+                /*min-width: 148px;*/
+                overflow: hidden;
+                scroll-behavior: smooth;
+            }
+            .tab{
+                position: relative;
+                @include borderBox(9px, 12px);
+                max-width: 148px;
+                min-width: 50px;
+                text-align: center;
+                background-color: $tabBg;
+                color: $pColor;
+                font-size: 14px;
+                margin-right: 4px;
+                cursor: pointer;
+                user-select: none;
+                border-radius:6px 6px 0 0;
+                overflow: hidden;
+                @include single-line;
+                @include flex-center;
+                @include transition;
+                &::before{
+                    content: '';
+                    width: 20px;
+                    height: 20px;
+                    display: inline-block;
+                    background-color: $themeColor;
+                    position: absolute;
+                    top: -10px;
+                    left: -10px;
+                    transform: rotateZ(45deg);
+                    opacity: 0;
+                    @include transition;
+                }
+                &:last-of-type{
+                    margin-right: 0;
+                }
+                &.chosen{
+                    background-color: #fff;
+                    color: $themeColor;
+                    &::before{
+                        opacity: 1;
+                    }
+                }
+                &:hover{
+                    background-color: #fff;
+                }
+                &.btn-wrap{
+                    overflow: visible;
+                    position: relative;
+                    min-width: 148px;
+                    margin-right: 0;
+                    margin-left: 4px;
+                    &:focus{
+                        outline: none;
+                        border: none;
+                    }
+                    &::before{
+                        display: none;
+                    }
+                    span{
+                        position: relative;
+                        @include flex-center;
+                        i{
+                            position: absolute;
+                            top: 0;
+                            bottom: 0;
+                            margin: auto;
+                            left: -19px;
+                            color: $themeColor;
+                            @include flex-center;
+                        }
+                        span{
+                            color: $themeColor;
+                        }
+                    }
+                    .transition-box{
+                        z-index: 11;
+                        background-color: #fff;
+                        position: absolute;
+                        left: 0;
+                        top: 40px;
+                        padding: 6px 0;
+                        box-shadow:0 0 8px 0 rgba(0,0,0,0.08),0 0 4px 0 rgba(0,0,0,0.02);
+                        border-radius:2px;
+                        width: 100%;
+                        li{
+                            cursor: pointer;
+                            padding: 5px 24px 5px 12px;
+                            color: $pColor;
+                            text-align: left;
+                            @include transition();
+                            &:hover{
+                                color: $themeColor;
+                                background-color: #F2F0FE;
+                            }
+                        }
+                    }
+                }
+                .text{
+                    display: inline-block;
+                    width: 100%;
+                    @include single-line;
+                }
+                .new,.current-active{
+                    margin-left: 8px;
+                    padding: 0 4px;color: #fff;
+                    font-size: 12px;
+                    background-color: #41BF1C;
+                    border-radius: 3px;
+                    @include flex-center;
+                }
+                .current-active{
+                    background-color: $themeColor;
+                }
+            }
+        }
     }
     .el-zoom-in-top-enter-active,.el-zoom-in-top-leave-active{opacity:1;-webkit-transform:scaleY(1);transform:scaleY(1);-webkit-transition:opacity .3s cubic-bezier(.23,1,.32,1),-webkit-transform .3s cubic-bezier(.23,1,.32,1);transition:opacity .3s cubic-bezier(.23,1,.32,1),-webkit-transform .3s cubic-bezier(.23,1,.32,1);transition:transform .3s cubic-bezier(.23,1,.32,1),opacity .3s cubic-bezier(.23,1,.32,1);transition:transform .3s cubic-bezier(.23,1,.32,1),opacity .3s cubic-bezier(.23,1,.32,1),-webkit-transform .3s cubic-bezier(.23,1,.32,1);-webkit-transform-origin:center top;transform-origin:center top}.el-zoom-in-top-enter,.el-zoom-in-top-leave-active{opacity:0;-webkit-transform:scaleY(0);transform:scaleY(0)}
     .el-fade-in-linear-enter,.el-fade-in-linear-leave,.el-fade-in-linear-leave-active,.fade-in-linear-enter,.fade-in-linear-leave,.fade-in-linear-leave-active{opacity:0}.fade-in-linear-enter-active,.fade-in-linear-leave-active{-webkit-transition:opacity .2s linear;transition:opacity .2s linear}.el-fade-in-linear-enter-active,.el-fade-in-linear-leave-active{-webkit-transition:opacity .2s linear;transition:opacity .2s linear}
