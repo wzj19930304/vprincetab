@@ -1,9 +1,13 @@
 {
   "name": "vprincetab",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "private": false,
   "main": "lib/vprincetab.umd.min.js",
   "keywords": ["tab", "vprincetab", "princetab", "标签页", "tab标签页"],
+  "bugs": {
+    "name": "王子",
+    "email": "1547184399@qq.com"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

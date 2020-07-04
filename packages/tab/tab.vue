@@ -11,7 +11,7 @@
                         </div>
                     </transition>
                     <div class="tabs-inner" @scroll="handleTabsScrollChange">
-                        <div v-for="(item, index) in tabsList" :key="index" :class="`tab ${item.chosen ? 'chosen' : ''}`" @click="handleClickCurrentTab(item, index)">
+                        <div v-for="(item, index) in tabsList" :key="index" :class="`tab ${item.chosen ? 'chosen' : ''}`" :style="{width: actualTabWidth}" @click="handleClickCurrentTab(item, index)">
                             <slot name="tabs-inner">
                                 <span class="text">{{item.name}}</span>
                             </slot>
@@ -85,11 +85,26 @@
             customAddBtn: {
                 type: Boolean,
                 default: false
+            },
+            // tab的宽度(最小50)
+            tabWidth: {
+                type: String,
+                default: "148px"
             }
         },
         watch: {
             tabId(v) {
                 this.defaultSelect(v)
+            }
+        },
+        computed: {
+            actualTabWidth: {
+                get() {
+                    if(parseInt(this.tabWidth) < 50) {
+                        return "50px"
+                    }
+                },
+                set() {}
             }
         },
         mounted() {
@@ -108,21 +123,21 @@
                 this.$nextTick(() => {
                     let targetDom = this.$el.querySelector('.tabs-inner');
                     let targetRect = targetDom.getBoundingClientRect();
-                    // 152为当前tab的宽度(width + margin)
+                    // 4为当前tab的margin
                     // 选中的tab被右侧遮挡
-                    if((index+1) * 152 > targetRect.width + targetDom.scrollLeft) {
-                        this.tabsBtn.width = (index+1) * 152;
+                    if((index+1) * (this.actualTabWidth + 4) > targetRect.width + targetDom.scrollLeft) {
+                        this.tabsBtn.width = (index+1) * this.actualTabWidth + 4;
                         // 根据向左按钮判断滚动条滚动距离（若当时没有，在滚动时出现，会有48px偏差）
                         if(this.tabsBtn.showLeft) {
-                            targetDom.scrollLeft = (index+1) * 152 - targetRect.width
+                            targetDom.scrollLeft = (index+1) * this.actualTabWidth + 4 - targetRect.width
                         } else {
-                            targetDom.scrollLeft = (index+1) * 152 - targetRect.width + 38
+                            targetDom.scrollLeft = (index+1) * this.actualTabWidth + 4 - targetRect.width + 38
                         }
                     }
                     // 选中的tab被左侧遮挡
-                    if(index * 152 < targetDom.scrollLeft) {
+                    if(index * (this.actualTabWidth + 4) < targetDom.scrollLeft) {
                         this.tabsBtn.width = 0;
-                        targetDom.scrollLeft = index * 152
+                        targetDom.scrollLeft = index * (this.actualTabWidth + 4)
                     }
                 });
                 this.$emit('handleClickCurrentTab', item, index);
@@ -284,7 +299,7 @@
                     position: relative;
                     @include borderBox(9px, 12px);
                     max-width: 148px;
-                    min-width: 148px;
+                    min-width: 50px;
                     text-align: center;
                     background-color: $tabBg;
                     color: $pColor;
