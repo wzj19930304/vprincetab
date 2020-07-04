@@ -15,6 +15,12 @@ npm run serve
 npm run build
 ```
 
+### 引用
+```
+import VPrinceTab from 'vprincetab'
+import 'vprincetab/lib/vprincetab.css'
+```
+
 ### 参数：
 ```
 btnLabel: { // 添加按钮的文字
