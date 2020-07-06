@@ -1,13 +1,11 @@
 <template>
     <div id="v-prince-tab">
         <div class="tabs">
-            <transition name="el-fade-in-linear">
-                <div v-show="tabsBtn.showLeft" class="left-btn" @click="changeTabsScroll(true)">
-                    <slot name="left-btn">
-                        <span></span>
-                    </slot>
-                </div>
-            </transition>
+            <div v-if="tabsBtn.showLeft" class="left-btn" @click="changeTabsScroll(true)">
+                <slot name="left-btn">
+                    <span></span>
+                </slot>
+            </div>
             <div class="tabs-inner" @scroll="handleTabsScrollChange">
                 <div v-for="(item, index) in tabsList" :key="index" :class="`tab ${item.chosen ? 'chosen' : ''}`" :style="{width: actualTabWidth, minWidth: actualTabWidth}" @click="handleClickCurrentTab(item, index)">
                     <slot name="tabs-inner">
@@ -15,13 +13,11 @@
                     </slot>
                 </div>
             </div>
-            <transition name="el-fade-in-linear">
-                <div v-show="tabsBtn.showRight" class="right-btn" @click="changeTabsScroll(false)">
-                    <slot name="right-btn">
-                        <span></span>
-                    </slot>
-                </div>
-            </transition>
+            <div v-if="tabsBtn.showRight" class="right-btn" @click="changeTabsScroll(false)">
+                <slot name="right-btn">
+                    <span></span>
+                </slot>
+            </div>
             <div v-if="!customAddBtn" @click="addItem">
                 <slot name="customAddBtn"></slot>
             </div>
@@ -410,7 +406,6 @@
         }
     }
     .el-zoom-in-top-enter-active,.el-zoom-in-top-leave-active{opacity:1;-webkit-transform:scaleY(1);transform:scaleY(1);-webkit-transition:opacity .3s cubic-bezier(.23,1,.32,1),-webkit-transform .3s cubic-bezier(.23,1,.32,1);transition:opacity .3s cubic-bezier(.23,1,.32,1),-webkit-transform .3s cubic-bezier(.23,1,.32,1);transition:transform .3s cubic-bezier(.23,1,.32,1),opacity .3s cubic-bezier(.23,1,.32,1);transition:transform .3s cubic-bezier(.23,1,.32,1),opacity .3s cubic-bezier(.23,1,.32,1),-webkit-transform .3s cubic-bezier(.23,1,.32,1);-webkit-transform-origin:center top;transform-origin:center top}.el-zoom-in-top-enter,.el-zoom-in-top-leave-active{opacity:0;-webkit-transform:scaleY(0);transform:scaleY(0)}
-    .el-fade-in-linear-enter,.el-fade-in-linear-leave,.el-fade-in-linear-leave-active,.fade-in-linear-enter,.fade-in-linear-leave,.fade-in-linear-leave-active{opacity:0}.fade-in-linear-enter-active,.fade-in-linear-leave-active{-webkit-transition:opacity .2s linear;transition:opacity .2s linear}.el-fade-in-linear-enter-active,.el-fade-in-linear-leave-active{-webkit-transition:opacity .2s linear;transition:opacity .2s linear}
 </style>
 <style>
     html,body,ul,li,ol,button,div,span{
