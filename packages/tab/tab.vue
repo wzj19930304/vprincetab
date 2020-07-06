@@ -1,11 +1,13 @@
 <template>
     <div id="v-prince-tab">
         <div class="tabs">
-            <div v-if="tabsBtn.showLeft" class="left-btn" @click="changeTabsScroll(true)">
-                <slot name="left-btn">
-                    <span></span>
-                </slot>
-            </div>
+            <transition name="el-fade-in-linear">
+                <div v-show="tabsBtn.showLeft" style="max-width: 34px" class="left-btn" @click="changeTabsScroll(true)">
+                    <slot name="left-btn">
+                        <span></span>
+                    </slot>
+                </div>
+            </transition>
             <div class="tabs-inner" @scroll="handleTabsScrollChange">
                 <div v-for="(item, index) in tabsList" :key="index" :class="`tab ${item.chosen ? 'chosen' : ''}`" :style="{width: actualTabWidth, minWidth: actualTabWidth}" @click="handleClickCurrentTab(item, index)">
                     <slot name="tabs-inner">
@@ -13,11 +15,13 @@
                     </slot>
                 </div>
             </div>
-            <div v-if="tabsBtn.showRight" class="right-btn" @click="changeTabsScroll(false)">
-                <slot name="right-btn">
-                    <span></span>
-                </slot>
-            </div>
+            <transition name="el-fade-in-linear">
+                <div v-show="tabsBtn.showRight" style="max-width: 34px" class="right-btn" @click="changeTabsScroll(false)">
+                    <slot name="right-btn">
+                        <span></span>
+                    </slot>
+                </div>
+            </transition>
             <div v-if="!customAddBtn" @click="addItem">
                 <slot name="customAddBtn"></slot>
             </div>
@@ -28,11 +32,11 @@
                     </span>
                 </slot>
                 <slot name="add-menu">
-                    <transition name="el-zoom-in-top">
-                        <ul class="transition-box" v-show="show">
-                            <li @click.stop="addItem">{{btnChildrenLabel}}</li>
-                        </ul>
-                    </transition>
+                <transition name="el-zoom-in-top">
+                    <ul class="transition-box" v-show="show">
+                        <li @click.stop="addItem">{{btnChildrenLabel}}</li>
+                    </ul>
+                </transition>
                 </slot>
             </div>
         </div>
@@ -87,6 +91,15 @@
         watch: {
             tabId(v) {
                 this.defaultSelect(v)
+            },
+            'tabsBtn.showRight'(v) {
+                if(!v) {
+                    this.tabsList.forEach((item, i) => {
+                        if(item.chosen) {
+                            this.handleClickCurrentTab(item, i)
+                        }
+                    })
+                }
             }
         },
         computed: {
@@ -108,7 +121,8 @@
         },
         mounted() {
             this.formatTabs();
-            window.addEventListener('resize', this.formatTabs)
+            window.addEventListener('resize', this.formatTabs);
+            document.addEventListener('click', this.cancelShow);
         },
         methods: {
             // 点击当前tab
@@ -125,12 +139,12 @@
                     // 4为当前tab的margin
                     // 选中的tab被右侧遮挡
                     if((index+1) * (this.actualTabWidthNumber + 4) > targetRect.width + targetDom.scrollLeft) {
-                        this.tabsBtn.width = (index+1) * this.actualTabWidthNumber + 4;
+                        this.tabsBtn.width = (index+1) * (this.actualTabWidthNumber + 4);
                         // 根据向左按钮判断滚动条滚动距离（若当时没有，在滚动时出现，会有48px偏差）
                         if(this.tabsBtn.showLeft) {
-                            targetDom.scrollLeft = (index+1) * this.actualTabWidthNumber + 4 - targetRect.width
+                            targetDom.scrollLeft = (index+1) * (this.actualTabWidthNumber + 4) - targetRect.width
                         } else {
-                            targetDom.scrollLeft = (index+1) * this.actualTabWidthNumber + 4 - targetRect.width + 38
+                            targetDom.scrollLeft = (index+1) * (this.actualTabWidthNumber + 4) - targetRect.width + 36
                         }
                     }
                     // 选中的tab被左侧遮挡
@@ -189,7 +203,7 @@
                             this.handleClickCurrentTab(item, index);
                         }
                     });
-                    if(flag) {
+                    if(!flag) {
                         this.handleClickCurrentTab(this.tabsList[0], 0)
                     }
                 } else {
@@ -206,11 +220,16 @@
                 this.tabsList.forEach(item => {
                     item.chosen = false
                 });
+                this.formatTabs();
                 this.$emit('addItem');
+            },
+            cancelShow() {
+                this.show = false
             }
         },
         destroyed() {
-            window.removeEventListener('resize', this.formatTabs)
+            window.removeEventListener('resize', this.formatTabs);
+            document.removeEventListener('click', this.cancelShow)
         }
     }
 </script>
